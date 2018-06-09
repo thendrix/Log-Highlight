@@ -730,8 +730,9 @@ class LogHighlightThread(threading.Thread):
                 if get_base_dir is None or get_base_dir == "":
                     self.try_search_base = True
                     self.search_base(log_name)
-                    if self.base_dir != "":
-                        self.view.settings().set('result_base_dir', self.base_dir)
+                    if not self.view.settings().get('relpath_base_dir', True):
+                        if self.base_dir != "":
+                            self.view.settings().set('result_base_dir', self.base_dir)
                 else:
                     self.base_dir = get_base_dir
 
@@ -746,8 +747,10 @@ class LogHighlightThread(threading.Thread):
             self.search_base(log_name)
 
             # set base dir & apply 'result_file_regex'
-            if self.base_dir != "":
-                self.view.settings().set('result_base_dir', self.base_dir)
+            if not self.view.settings().get('relpath_base_dir', True):
+                if self.base_dir != "":
+                    self.view.settings().set('result_base_dir', self.base_dir)
+                
             self.view.settings().set('result_file_regex', LINK_REGX_RESULT)
 
         # bookmark & summary
